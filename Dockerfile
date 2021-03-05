@@ -50,6 +50,7 @@ RUN pip3 install future
 RUN pip3 install six==1.14.0
 RUN pip3 install tensorflow==1.14.0
 RUN pip3 install tf_slim
+RUN pip3 install ffmpeg-python
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
@@ -64,6 +65,10 @@ azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
     rm -f /bazel/installer.sh
 
 COPY . /mediapipe/
+WORKDIR /mediapipe/mediapipe/examples/desktop/
+RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 autoflip:run_autoflip
+
+
 
 # If we want the docker image to contain the pre-built object_detection_offline_demo binary, do the following
 # RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/demo:object_detection_tensorflow_demo
